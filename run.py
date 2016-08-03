@@ -2,48 +2,24 @@
 import argparse
 import os
 from os.path import join, exists, abspath
-from subprocess import Popen, PIPE
+from subprocess import check_call
 import subprocess
 from glob import glob
 
-def run(command, env={}):
-    process = Popen(command, stdout=PIPE, stderr=subprocess.STDOUT, shell=True, env=env)
-    while True:
-        line = process.stdout.readline()
-        line = str(line, 'utf-8')[:-1]
-        print(line)
-        if line == '' and process.poll() != None:
-            break
-
-def check_for_freesurfer(subject, bids_dir, output_dir):
-    cmd = ["docker", "run", "-ti", "bids/freesurfer",
-           "--participant_label", subject, bids_dir, output_dir, "participant"]
-    if exists(join(output_dir, subject_label, "scripts", "recon-all.done")):
-        return join(output_dir, subject_label)
-    else:
-        run(cmd)
-        return join(output_dir, subject_label)
-
-def check_for_ants(t1_file, output_dir):
-    from nipype.interfaces.ants.segmentation import CorticalThickness
-
-    antsCT = CorticalThickness()
-    antsCT.inputs.dimension = 3
-    antsCT.inputs.anatomical_image = t1_file
-    antsCT.inputs.brain_probability_mask = abspath("OASIS-30_Atropos_ProbabilityMask.nii.gz ")
-    antsCT.inputs.t1_registration_template = abspath("OASIS-30_Atropos_template.nii.gz")
-    antsCT.inputs.segmentation_priors = [abspath("OASIS-30_Atropos_priors%d.nii.gz" % i) for i in range(1,5)]
-    antsCT.inputs.extraction_registration_mask = abspath("OASIS-30_Atropos_ExtractionMask.nii.gz")
-    antsCT.inputs.
+def bidser(basedir, subject_label):
+    out = glob(join(basedir, "sub-%s_T1w" % (subject_label))) + \
+    glob(join(basedir, "sub-%s_ses-*_T1w" % (subject_label)))
+    return out
 
 
 
-def run_mindboggle(fsid, antsfile, output_dir):
 
-    cmd = ["mindboggle", fsid,
+def run_mindboggle(fs_path, antsfile, output_dir):
+
+    cmd = ["mindboggle", fs_path,
            "--ants", antsfile, "--out", output_dir
            ]
-    run(cmd)
+    check_call(cmd)
     return
 
 
@@ -77,14 +53,18 @@ else:
     subjects_to_analyze = [subject_dir.split("-")[-1] for subject_dir in subject_dirs]
 
 # running participant level
+print(args)
+print(subjects_to_analyze)
 if args.analysis_level == "participant":
-
+    print("running")
     # find all T1s and skullstrip them
     for subject_label in subjects_to_analyze:
-        for T1_file in glob(os.path.join(args.bids_dir, "sub-%s" % subject_label,
-                                         "anat", "*_T1w.nii*")) + glob(os.path.join(args.bids_dir, "sub-%s" %
-                subject_label, "ses-*", "anat", "*_T1w.nii*")):
-            fsid_path = check_for_freesurfer(subject_label, args.bids_dir, args.output_dir)
-            antsid = check_for_ants(T1_file, args.output_dir)
-            run_mindboggle(fsid_path, antsid, args.output_dir)
+            print("subject_label is", subject_label)
+            fs_folders = bidser(join(args.output_dir, "derivatives", "freesurfer"), subject_label)
+            ants_folders = [join(q, "antsBrainSegmentation.nii.gz")
+                            for q in bidser(join(args.output_dir, "derivatives", "ants"), subject_label)]
+            if not len(fs_folders) == len(ants_folders):
+                raise Exception("run ANTS and Freesurfer for all T1w files of %s" % subject_label)
+            for idx, fsid in enumerate(fs_folders):
+                run_mindboggle(fsid, ants_folders[idx], args.output_dir)
 
