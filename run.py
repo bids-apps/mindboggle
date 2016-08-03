@@ -17,7 +17,8 @@ def bidser(basedir, subject_label):
 def run_mindboggle(fs_path, antsfile, output_dir):
 
     cmd = ["mindboggle", fs_path,
-           "--ants", antsfile, "--out", output_dir
+           "--ants", antsfile, "--out", join(output_dir, "derivatives"),
+           "--working", join(output_dir,"scratch")
            ]
     check_call(cmd)
     return
