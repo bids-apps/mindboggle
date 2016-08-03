@@ -1,0 +1,42 @@
+# mindboggle
+
+This app assumes freesurfer and ants cortical thickness have already run. 
+For more instructions, see the [mindboggle website](http://mindboggle.readthedocs.io/en/latest/#preprocessing)
+
+The folder structure of the mindboggle input should look like:
+```
+bids_dir/
+  sub01/
+    sess-*/
+      anat/
+        T1w.nii.gz
+      
+  derivatives/
+    freesurfer/
+      sub-*_ses-*_T1w.nii.gz/
+        mri/ 
+        label/
+        surf/
+    ants/
+      sub-*_ses-*_T1w.nii.gz/
+        antsBrainExtractionMask.nii.gz		
+        antsSubjectToTemplate0GenericAffine.mat	
+        antsTemplateToSubject0Warp.nii.gz
+        antsBrainSegmentation.nii.gz		
+        antsSubjectToTemplate1Warp.nii.gz	
+        antsTemplateToSubject1GenericAffine.mat
+```
+
+To build to docker, do
+
+```
+docker build -t bids/mindboggle .
+```
+
+To run the docker, do
+
+```
+ docker run -ti -v /path/to/bids_dir:/root/data bids/mindboggle /root/data /root/data/ participant
+```
+
+
