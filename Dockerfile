@@ -93,5 +93,11 @@ RUN printf '#!/bin/bash\nexport ANTSPATH=/opt/ants\nexport PATH=$ANTSPATH:$PATH'
 
 RUN echo 'source activate mb-3.5' >> /etc/profile.d/nipype.sh
 
+#get templates and atlases we need
+RUN curl -L https://osf.io/bx35m/?action=download -o OASIS-30-Atropos.zip
+RUN unzip OASIS-30-Atropos.zip
+
+RUN curl -L https://osf.io/d2cmy/?action=download&version=1 -o OASIS-TRT-20_jointfusion_DKT31_CMA_labels_in_OASIS-30_v2.nii.gz
+
 CMD ["/bin/bash"]
 
