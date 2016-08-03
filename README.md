@@ -39,4 +39,8 @@ To run the docker, do
  docker run -ti -v /path/to/bids_dir:/root/data bids/mindboggle /root/data /root/data/ participant
 ```
 
+To use bash:
 
+```
+ docker run -ti -v /Users/keshavan/Downloads/mindboggle_input_example/bids:/root/data --entrypoint /bin/bash bids/mindboggle 
+```
