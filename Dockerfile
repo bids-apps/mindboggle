@@ -90,6 +90,13 @@ RUN mkdir -p /opt/ants && \
 ENV ANTSPATH /opt/ants
 ENV PATH $ANTSPATH:$PATH
 
+#Get Atropos Template
+
+RUN curl -L 'https://osf.io/rh9km/?action=download' -o OASIS-30-Atropos.zip
+RUN unzip 'OASIS-30-Atropos.zip'
+RUN rm OASIS-30-Atropos.zip
+RUN rm -r __MACOSX
+
 RUN echo '#!/bin/bash' > /etc/profile.d/nipype_deps.sh && \
     echo 'export ANTSPATH=/opt/ants' >> /etc/profile.d/nipype_deps.sh && \
     echo 'export PATH=$ANTSPATH:$PATH' >> /etc/profile.d/nipype_deps.sh
