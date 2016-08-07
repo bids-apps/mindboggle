@@ -3,7 +3,7 @@ MAINTAINER Mindboggle <anishakeshavan@gmail.com>
 
 # Preparations
 RUN ln -snf /bin/bash /bin/sh
-ARG DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Update packages and install the minimal set of tools
 RUN apt-get update && \
