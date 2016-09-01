@@ -89,4 +89,6 @@ RUN echo "export vtk_cpp_tools=$vtk_cpp_tools" >> /etc/profile.d/nipype.sh
 RUN echo "export PATH=$vtk_cpp_tools:\$PATH" >> /etc/profile.d/nipype.sh
 RUN echo "source /etc/profile.d/nipype.sh" >> /etc/bash.bashrc
 
+COPY version /version
+
 ENTRYPOINT ["/code/run.py"]
