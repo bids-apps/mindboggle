@@ -32,6 +32,7 @@ RUN apt-get install -y libblas-dev \
                        graphviz
 
 RUN apt-get install -y curl
+RUN apt-get install -y git
 
 
 # Enable neurodebian
