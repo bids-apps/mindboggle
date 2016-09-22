@@ -57,10 +57,11 @@ def run_ants_cortical_thickness(subid, nii_files, output_dir, merge = False):
     wf.run()
 
 
-def run_mindboggle(fs_path, antsfile, output_dir, n_cpus=1):
+def run_mindboggle(fs_path, output_dir, n_cpus=1):
 
     cmd = ["mindboggle", fs_path,
-           "--ants", antsfile, "--out", join(output_dir, "derivatives"),
+           #"--ants", antsfile,
+           "--out", join(output_dir, "derivatives"),
            "--working", join(output_dir,"scratch"),
            "--cache", join(output_dir,"scratch", "cache"),
            "--cpus", str(n_cpus)
@@ -107,35 +108,7 @@ if args.analysis_level == "participant":
     # find all T1s and skullstrip them
     for subject_label in subjects_to_analyze:
             print("subject_label is", subject_label)
-            fs_folders = bidser(join(args.output_dir, "derivatives", "freesurfer"), subject_label)
-            ants_folders = [join(q, "antsBrainSegmentation.nii.gz")
-                            for q in bidser(join(args.output_dir, "derivatives", "ants"), subject_label)
-                            if exists(join(q, "antsBrainSegmentation.nii.gz"))]
-
-            #TODO: need to make sure that the order of fs_folders matches the ants_folders
-            if not len(fs_folders) == len(ants_folders):
-                if len(fs_folders) < len(ants_folders):
-                    raise Exception("Free for all T1w files of %s" % subject_label)
-                else:
-                    for f in fs_folders:
-                        fsid = os.path.split(f)[-1]
-                        info = fsid.split("_")
-                        if len(info) == 2:
-                            sub, modality = info
-                            if modality == "T1w":
-                                t1 = glob(join(args.bids_dir, sub, "anat","*.nii.gz"))
-                                if not len(t1):
-                                    raise Exception("Cannot find T1 files for", f)
-                                else:
-                                    run_ants_cortical_thickness(sub, t1, args.output_dir, False)
-                            else:
-                                raise Exception("Is this a T1 file?")
-                        elif len(info) == 3:
-                            sub, ses, modality = info
-                            t1 = glob(join(args.bids_dir, sub, "anat", "*.nii.gz"))
-                        else:
-                            raise Exception("Not Implemented Yet.")
-
-            for idx, fsid in enumerate(fs_folders):
-                run_mindboggle(fsid, ants_folders[idx], args.output_dir)
+            fs_folder = join(args.output_dir, "derivatives", "freesurfer", "sub-"+subject_label)
+            print("fs folder is", fs_folder)
+            run_mindboggle(fs_folder, args.output_dir)
 
