@@ -64,8 +64,8 @@ ENV LANG C.UTF-8
 # Add conda-forge channel in conda
 RUN conda config --add channels conda-forge
 
-RUN conda install nipype
-RUN conda install -c https://conda.anaconda.org/clinicalgraphics vtk cmake
+RUN conda install -y nipype
+RUN conda install -y -c https://conda.anaconda.org/clinicalgraphics vtk cmake
 RUN git clone https://github.com/binarybottle/mindboggle
 RUN cd mindboggle && \
     python setup.py install

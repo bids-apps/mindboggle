@@ -61,7 +61,7 @@ def run_mindboggle(fs_path, output_dir, n_cpus=1):
 
     cmd = ["mindboggle", fs_path,
            #"--ants", antsfile,
-           "--out", join(output_dir, "derivatives"),
+           "--out", join(output_dir, "derivatives", "mindboggle"),
            "--working", join(output_dir,"scratch"),
            "--cache", join(output_dir,"scratch", "cache"),
            "--cpus", str(n_cpus),"--no_surfaces",
