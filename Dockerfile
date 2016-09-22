@@ -84,22 +84,22 @@ RUN mkdir ${HOME}/data
 RUN mkdir /code
 
 # Install ANTs
-RUN mkdir -p /opt/ants && \
-    curl -sSL "https://2a353b13e8d2d9ac21ce543b7064482f771ce658.googledrive.com/host/0BxI12kyv2olZVFhUcGVpYWF3R3c/ANTs-Linux_Ubuntu14.04.tar.bz2" \
-    | tar -xjC /opt/ants --strip-components 1
-ENV ANTSPATH /opt/ants
-ENV PATH $ANTSPATH:$PATH
+#RUN mkdir -p /opt/ants && \
+#    curl -sSL "https://2a353b13e8d2d9ac21ce543b7064482f771ce658.googledrive.com/host/0BxI12kyv2olZVFhUcGVpYWF3R3c/ANTs-Linux_Ubuntu14.04.tar.bz2" \
+#    | tar -xjC /opt/ants --strip-components 1
+#ENV ANTSPATH /opt/ants
+#ENV PATH $ANTSPATH:$PATH
 
 #Get Atropos Template
 
-RUN curl -L 'https://osf.io/rh9km/?action=download' -o OASIS-30-Atropos.zip
-RUN unzip 'OASIS-30-Atropos.zip'
-RUN rm OASIS-30-Atropos.zip
-RUN rm -r __MACOSX
+#RUN curl -L 'https://osf.io/rh9km/?action=download' -o OASIS-30-Atropos.zip
+#RUN unzip 'OASIS-30-Atropos.zip'
+#RUN rm OASIS-30-Atropos.zip
+#RUN rm -r __MACOSX
 
-RUN echo '#!/bin/bash' > /etc/profile.d/nipype_deps.sh && \
-    echo 'export ANTSPATH=/opt/ants' >> /etc/profile.d/nipype_deps.sh && \
-    echo 'export PATH=$ANTSPATH:$PATH' >> /etc/profile.d/nipype_deps.sh
+#RUN echo '#!/bin/bash' > /etc/profile.d/nipype_deps.sh && \
+#    echo 'export ANTSPATH=/opt/ants' >> /etc/profile.d/nipype_deps.sh && \
+#    echo 'export PATH=$ANTSPATH:$PATH' >> /etc/profile.d/nipype_deps.sh
 
 COPY run.py /code/run.py
 
