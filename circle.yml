@@ -13,7 +13,7 @@ dependencies:
 
   override:
     - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
-    - if [[ ! -d ~/data/ds114_test1 ]]; then wget -c -P ${HOME}/downloads/ "https://googledrive.com/host/0B2JWN60ZLkgkMEw4bW5VUUpSdFU/ds114_test1_with_freesurfer.tar.gz" && mkdir -p ${HOME}/data && tar xfz ${HOME}/downloads/ds114_test1.tar.gz -C ${HOME}/data; fi
+    - if [[ ! -d ~/data/ds114_test1 ]]; then wget -c -P ${HOME}/downloads/ "https://googledrive.com/host/0B2JWN60ZLkgkMEw4bW5VUUpSdFU/ds114_test1_with_freesurfer.tar.gz" && mkdir -p ${HOME}/data && tar xfz ${HOME}/downloads/ds114_test1_with_freesurfer.tar.gz -C ${HOME}/data; fi
     - git describe --tags > version
     - docker build -t bids/${CIRCLE_PROJECT_REPONAME,,} . :
         timeout: 21600
