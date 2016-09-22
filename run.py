@@ -64,7 +64,7 @@ def run_mindboggle(fs_path, output_dir, n_cpus=1):
            "--out", join(output_dir, "derivatives"),
            "--working", join(output_dir,"scratch"),
            "--cache", join(output_dir,"scratch", "cache"),
-           "--cpus", str(n_cpus)
+           "--cpus", str(n_cpus),"--no_surfaces",
            ]
     check_call(cmd)
     return
