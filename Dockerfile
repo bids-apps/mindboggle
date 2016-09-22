@@ -29,7 +29,7 @@ RUN apt-get install -y libblas-dev \
                        libxft-dev \
                        libjpeg-dev \
                        libyaml-dev \
-                       graphviz \
+                       graphviz
 
 RUN apt-get install -y curl
 
