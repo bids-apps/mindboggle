@@ -6,14 +6,14 @@ RUN ln -snf /bin/bash /bin/sh
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Update packages and install the minimal set of tools
-RUN apt-get update && \
-    apt-get install -y curl \
+RUN apt-get update #&& \
+RUN apt-get install -y curl \
                        git \
                        xvfb \
                        bzip2 \
                        unzip \
-                       apt-utils \
-                       gfortran \
+                       apt-utils
+RUN apt-get install -y gfortran \
                        fusefat \
                        liblapack-dev \
                        libblas-dev \
