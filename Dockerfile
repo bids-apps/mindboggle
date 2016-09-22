@@ -13,10 +13,9 @@ RUN apt-get install -y curl \
                        bzip2 \
                        unzip \
                        apt-utils
-RUN apt-get install -y gfortran \
-                       fusefat \
-                       liblapack-dev \
-                       libblas-dev \
+RUN apt-get install -y gfortran
+RUN apt-get install -y liblapack-dev
+RUN apt-get install -y libblas-dev \
                        libatlas-dev \
                        libatlas-base-dev \
                        libblas3 \
