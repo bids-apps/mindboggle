@@ -1,5 +1,8 @@
 # mindboggle
 
+[![Build Status](https://circleci.com/gh/BIDS-Apps/mindboggle.png?circle-token=:circle-token)](https://circleci.com/gh/BIDS-Apps/mindboggle)  
+
+
 This app assumes freesurfer and ants cortical thickness have already run. 
 For more instructions, see the [mindboggle website](http://mindboggle.readthedocs.io/en/latest/#preprocessing)
 

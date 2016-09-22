@@ -6,17 +6,16 @@ RUN ln -snf /bin/bash /bin/sh
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Update packages and install the minimal set of tools
-RUN apt-get update && \
-    apt-get install -y curl \
+RUN apt-get update #&& \
+RUN apt-get install -y curl \
                        git \
                        xvfb \
                        bzip2 \
                        unzip \
-                       apt-utils \
-                       gfortran \
-                       fusefat \
-                       liblapack-dev \
-                       libblas-dev \
+                       apt-utils
+RUN apt-get install -y gfortran
+RUN apt-get install -y liblapack-dev
+RUN apt-get install -y libblas-dev \
                        libatlas-dev \
                        libatlas-base-dev \
                        libblas3 \
@@ -32,7 +31,8 @@ RUN apt-get update && \
                        libyaml-dev \
                        graphviz
 
-
+RUN apt-get install -y curl
+RUN apt-get install -y git
 
 
 # Enable neurodebian
@@ -81,8 +81,26 @@ RUN mkdir $vtk_cpp_tools && \
 
 
 RUN mkdir ${HOME}/data
-
 RUN mkdir /code
+
+# Install ANTs
+#RUN mkdir -p /opt/ants && \
+#    curl -sSL "https://2a353b13e8d2d9ac21ce543b7064482f771ce658.googledrive.com/host/0BxI12kyv2olZVFhUcGVpYWF3R3c/ANTs-Linux_Ubuntu14.04.tar.bz2" \
+#    | tar -xjC /opt/ants --strip-components 1
+#ENV ANTSPATH /opt/ants
+#ENV PATH $ANTSPATH:$PATH
+
+#Get Atropos Template
+
+#RUN curl -L 'https://osf.io/rh9km/?action=download' -o OASIS-30-Atropos.zip
+#RUN unzip 'OASIS-30-Atropos.zip'
+#RUN rm OASIS-30-Atropos.zip
+#RUN rm -r __MACOSX
+
+#RUN echo '#!/bin/bash' > /etc/profile.d/nipype_deps.sh && \
+#    echo 'export ANTSPATH=/opt/ants' >> /etc/profile.d/nipype_deps.sh && \
+#    echo 'export PATH=$ANTSPATH:$PATH' >> /etc/profile.d/nipype_deps.sh
+
 COPY run.py /code/run.py
 
 RUN echo "export vtk_cpp_tools=$vtk_cpp_tools" >> /etc/profile.d/nipype.sh
