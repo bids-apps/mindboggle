@@ -1,0 +1,34 @@
+general:
+  artifacts:
+    - "~/outputs1"
+    - "~/outputs2"
+machine:
+  services:
+    - docker #don't use 1.10 - caching is broken
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+    - "~/data"
+
+  override:
+    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
+    - git describe --tags > version
+    - docker build -t bids/${CIRCLE_PROJECT_REPONAME,,} . :
+        timeout: 21600
+    - mkdir -p ~/docker; docker save "bids/${CIRCLE_PROJECT_REPONAME,,}" > ~/docker/image.tar
+    - mkdir -p ${HOME}/outputs
+
+test:
+  override:
+    - echo "pass"
+
+deployment:
+  hub:
+    owner: BIDS-Apps
+    tag: /.*/
+    commands:
+      - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS && docker push bids/${CIRCLE_PROJECT_REPONAME}:latest; fi :
+          timeout: 21600
+      - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS && docker tag bids/${CIRCLE_PROJECT_REPONAME} bids/${CIRCLE_PROJECT_REPONAME}:$CIRCLE_TAG && docker push bids/${CIRCLE_PROJECT_REPONAME}:$CIRCLE_TAG; fi :
+          timeout: 21600

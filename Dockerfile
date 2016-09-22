@@ -3,7 +3,7 @@ MAINTAINER Mindboggle <anishakeshavan@gmail.com>
 
 # Preparations
 RUN ln -snf /bin/bash /bin/sh
-ARG DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Update packages and install the minimal set of tools
 RUN apt-get update && \
@@ -106,5 +106,7 @@ COPY run.py /code/run.py
 RUN echo "export vtk_cpp_tools=$vtk_cpp_tools" >> /etc/profile.d/nipype.sh
 RUN echo "export PATH=$vtk_cpp_tools:\$PATH" >> /etc/profile.d/nipype.sh
 RUN echo "source /etc/profile.d/nipype.sh" >> /etc/bash.bashrc
+
+COPY version /version
 
 ENTRYPOINT ["/code/run.py"]
