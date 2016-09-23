@@ -2,18 +2,17 @@
 
 [![Build Status](https://circleci.com/gh/BIDS-Apps/mindboggle.png?circle-token=:d4d232bd9d9bcf925155774e1b2d24cdc365bd19)](https://circleci.com/gh/BIDS-Apps/mindboggle)  
 
+## Description 
+
+The Mindboggle project's mission is to improve the accuracy, precision, and consistency of automated labeling and shape analysis of human brain image data. We promote open science by making all software, data, and documentation freely and openly available. For more information on mindboggle, check out the [mindboggle website](http://mindboggle.readthedocs.io/en/latest/#preprocessing)
+
+## Docker 
 
 This app assumes the freesurfer BIDS-App has been run. 
-For more information on mindboggle, see the [mindboggle website](http://mindboggle.readthedocs.io/en/latest/#preprocessing)
 
 The folder structure of the mindboggle input should look like:
 ```
 bids_dir/
-  sub01/
-    sess-*/
-      anat/
-        T1w.nii.gz
-      
   derivatives/
     freesurfer/
       sub-*/
@@ -39,3 +38,18 @@ To use bash:
 ```
  docker run -ti -v /Users/keshavan/Downloads/mindboggle_input_example/bids:/root/data --entrypoint /bin/bash bids/mindboggle 
 ```
+
+## Acknowledgements
+
+When using this app, please cite:
+
+```
+101 labeled brain images and a consistent human cortical labeling protocol.
+Arno Klein, Jason Tourville. 2012. Frontiers in Brain Imaging Methods.
+6:171. DOI: 10.3389/fnins.2012.00171
+```
+
+
+## Error Reporting
+
+Please report errors on the Issues page of this repository.
