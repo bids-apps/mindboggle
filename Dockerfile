@@ -33,6 +33,7 @@ RUN apt-get install -y libblas-dev \
 
 RUN apt-get install -y curl
 RUN apt-get install -y git
+RUN apt-get install -y bzip2
 
 
 # Enable neurodebian
@@ -84,15 +85,15 @@ RUN mkdir ${HOME}/data
 RUN mkdir /code
 
 # Install ANTs
-#RUN mkdir -p /opt/ants && \
-#    curl -sSL "https://2a353b13e8d2d9ac21ce543b7064482f771ce658.googledrive.com/host/0BxI12kyv2olZVFhUcGVpYWF3R3c/ANTs-Linux_Ubuntu14.04.tar.bz2" \
-#    | tar -xjC /opt/ants --strip-components 1
-#ENV ANTSPATH /opt/ants
-#ENV PATH $ANTSPATH:$PATH
-
-RUN apt-get install -y ants
-ENV ANTSPATH /opt/ants/bin/
+RUN mkdir -p /opt/ants && \
+    curl -sSL "https://2a353b13e8d2d9ac21ce543b7064482f771ce658.googledrive.com/host/0BxI12kyv2olZVFhUcGVpYWF3R3c/ANTs-Linux_Ubuntu14.04.tar.bz2" \
+    | tar -xjC /opt/ants --strip-components 1
+ENV ANTSPATH /opt/ants
 ENV PATH $ANTSPATH:$PATH
+
+#RUN apt-get install -y ants
+#ENV ANTSPATH /usr/bin/
+#ENV PATH $ANTSPATH:$PATH
 
 #Get Atropos Template
 
@@ -102,7 +103,7 @@ ENV PATH $ANTSPATH:$PATH
 #RUN rm -r __MACOSX
 
 RUN echo '#!/bin/bash' > /etc/profile.d/nipype_deps.sh && \
-    echo 'export ANTSPATH=/opt/ants/bin' >> /etc/profile.d/nipype_deps.sh && \
+    echo 'export ANTSPATH=/opt/ants' >> /etc/profile.d/nipype_deps.sh && \
     echo 'export PATH=$ANTSPATH:$PATH' >> /etc/profile.d/nipype_deps.sh
 
 COPY run.py /code/run.py
