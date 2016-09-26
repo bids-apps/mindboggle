@@ -108,7 +108,7 @@ if args.analysis_level == "participant":
     # find all T1s and skullstrip them
     for subject_label in subjects_to_analyze:
             print("subject_label is", subject_label)
-            fs_folder = join(args.output_dir, "derivatives", "freesurfer", "sub-"+subject_label)
+            fs_folder = join(args.bids_dir, "derivatives", "freesurfer", "sub-"+subject_label)
             print("fs folder is", fs_folder)
             run_mindboggle(fs_folder, args.output_dir)
 
