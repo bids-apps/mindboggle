@@ -14,10 +14,7 @@ dependencies:
   override:
     - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
     - if [[! -d ~/data]]; then mkdir -p ~/data; fi
-    - if [[ ! -d ~/data/ds114_test1 ]]; then 
-	-   wget -c -O ~/data/ds114_test1_with_freesurfer.tar.gz "https://files.osf.io/v1/resources/9q7dv/providers/osfstorage/57e54a106c613b01d9d3ed7d" 
-	-   tar xfz ~/data/ds114_test1_with_freesurfer.tar.gz -C ~/data;
-	- fi
+    - if [[ ! -d ~/data/ds114_test1 ]]; then wget -c -O ~/data/ds114_test1_with_freesurfer.tar.gz "https://files.osf.io/v1/resources/9q7dv/providers/osfstorage/57e54a106c613b01d9d3ed7d" && tar xfz ~/data/ds114_test1_with_freesurfer.tar.gz -C ~/data; fi
     - git describe --tags > version
     - docker build -t bids/${CIRCLE_PROJECT_REPONAME,,} . :
         timeout: 21600
