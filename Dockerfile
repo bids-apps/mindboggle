@@ -90,7 +90,7 @@ RUN mkdir -p /opt/ants && \
 #RUN tar -xjC /opt/ants --strip-components 1
 RUN cd /opt/ants && \
     tar -vxjf ANTs-Linux_Ubuntu14.04.tar.bz2
-ENV ANTSPATH /opt/ants/ANTs-Linux_Ubuntu14.04
+ENV ANTSPATH /opt/ants/ANTs.2.1.0.Debian-Ubuntu_X64
 ENV PATH $ANTSPATH:$PATH
 
 #RUN apt-get install -y ants
@@ -105,7 +105,7 @@ ENV PATH $ANTSPATH:$PATH
 #RUN rm -r __MACOSX
 
 RUN echo '#!/bin/bash' > /etc/profile.d/nipype_deps.sh && \
-    echo 'export ANTSPATH=/opt/ants/ANTs-Linux_Ubuntu14.04' >> /etc/profile.d/nipype_deps.sh && \
+    echo 'export ANTSPATH=/opt/ants/ANTs.2.1.0.Debian-Ubuntu_X64' >> /etc/profile.d/nipype_deps.sh && \
     echo 'export PATH=$ANTSPATH:$PATH' >> /etc/profile.d/nipype_deps.sh
 
 COPY run.py /code/run.py
