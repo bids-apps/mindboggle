@@ -16,8 +16,7 @@ dependencies:
     - if [[ ! -d ~/data ]]; then mkdir -p ~/data; fi
     - if [[ ! -d ~/data/ds114_test1_with_freesurfer ]]; then wget -c -O ~/ds114_test1_with_freesurfer.tar.gz "https://files.osf.io/v1/resources/9q7dv/providers/osfstorage/57e54a106c613b01d9d3ed7d"; fi
     - ls -la
-    - tar xfz ~/ds114_test1_with_freesurfer.tar.gz -C ~/data
-    - git describe --tags > version
+    - tar xfz ~/ds114_test1_with_freesurfer.tar.gz -C ~/data # - git describe --tags > version
     - docker build -t bids/${CIRCLE_PROJECT_REPONAME,,} . :
         timeout: 21600
     - mkdir -p ~/docker; docker save "bids/${CIRCLE_PROJECT_REPONAME,,}" > ~/docker/image.tar
