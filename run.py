@@ -87,7 +87,7 @@ parser.add_argument('--participant_label', help='The label(s) of the participant
                                                 'provided all subjects should be analyzed. Multiple '
                                                 'participants can be specified with a space separated list.',
                     nargs="+")
-parser.add_argument("--n_cpu", help="number of cpus", default="1")
+parser.add_argument("--n_cpus", help="number of cpus", default="1")
 
 args = parser.parse_args()
 
@@ -110,5 +110,5 @@ if args.analysis_level == "participant":
             print("subject_label is", subject_label)
             fs_folder = join(args.bids_dir, "derivatives", "freesurfer", "sub-"+subject_label)
             print("fs folder is", fs_folder)
-            run_mindboggle(fs_folder, args.output_dir)
+            run_mindboggle(fs_folder, args.output_dir, args.n_cpus)
 
