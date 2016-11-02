@@ -67,6 +67,7 @@ RUN conda config --add channels conda-forge
 
 RUN conda install -y nipype
 RUN conda install -y -c https://conda.anaconda.org/clinicalgraphics vtk cmake
+RUN conda install -y pandas
 RUN git clone https://github.com/binarybottle/mindboggle
 RUN cd mindboggle && \
     python setup.py install
