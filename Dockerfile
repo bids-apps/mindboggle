@@ -37,10 +37,9 @@ RUN apt-get install -y bzip2
 
 
 # Enable neurodebian
-RUN curl -sSL http://neuro.debian.net/lists/vivid.de-m.full | tee /etc/apt/sources.list.d/neurodebian.sources.list && \
-    curl -sSL http://neuro.debian.net/lists/vivid.us-tn.full >> /etc/apt/sources.list.d/neurodebian.sources.list && \
+RUN curl -sSL http://neuro.debian.net/lists/vivid.us-ca.full | tee /etc/apt/sources.list.d/neurodebian.sources.list && \
     apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 0xA5D32F012649A5A9 && \
-    apt-get update #&& \
+    apt-get update
 
 # Clear apt cache to reduce image size
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
