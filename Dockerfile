@@ -1,4 +1,4 @@
-FROM ubuntu:vivid
+FROM bids/freesurfer
 MAINTAINER Mindboggle <anishakeshavan@gmail.com>
 
 # Preparations
@@ -12,14 +12,14 @@ RUN apt-get install -y curl \
                        xvfb \
                        bzip2 \
                        unzip \
-                       apt-utils
+                       apt-utils 
 RUN apt-get install -y gfortran
 RUN apt-get install -y liblapack-dev
 RUN apt-get install -y libblas-dev \
                        libatlas-dev \
                        libatlas-base-dev \
                        libblas3 \
-                       libblas-common \
+                       #libblas-common \
                        libopenblas-dev \
                        libxml2-dev \
                        libxslt1-dev \
@@ -29,7 +29,10 @@ RUN apt-get install -y libblas-dev \
                        libxft-dev \
                        libjpeg-dev \
                        libyaml-dev \
-                       graphviz
+                       graphviz \
+                       lib32z1 \ 
+                       make \
+                       g++ libsm-dev libXext-dev libXt-dev
 
 RUN apt-get install -y curl
 RUN apt-get install -y git
@@ -37,7 +40,7 @@ RUN apt-get install -y bzip2
 
 
 # Enable neurodebian
-RUN curl -sSL http://neuro.debian.net/lists/vivid.us-ca.full | tee /etc/apt/sources.list.d/neurodebian.sources.list && \
+RUN curl -sSL http://neuro.debian.net/lists/trusty.us-tn.full | tee /etc/apt/sources.list.d/neurodebian.sources.list && \
     apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 0xA5D32F012649A5A9 && \
     apt-get update
 
@@ -75,6 +78,8 @@ ENV CONDA_PATH "/usr/local/miniconda/"
 ENV VTK_DIR "$CONDA_PATH/lib/cmake/vtk-7.0"
 ENV vtk_cpp_tools "/root/mindboggle/vtk_cpp_tools/bin"
 
+#RUN apt-get update
+#RUN apt-get install -y make g++ libsm-dev libXext-dev libXt-dev
 RUN mkdir $vtk_cpp_tools && \
     cd $vtk_cpp_tools && \
     cmake ../ -DVTK_DIR:STRING=$VTK_DIR && \
@@ -82,16 +87,16 @@ RUN mkdir $vtk_cpp_tools && \
 
 
 RUN mkdir ${HOME}/data
-RUN mkdir /code
+#RUN mkdir /code
 
 # Install ANTs
-RUN mkdir -p /opt/ants && \
-    curl -L "https://osf.io/jrvjk/?action=download" -o /opt/ants/ANTs-Linux_Ubuntu14.04.tar.bz2
+#RUN mkdir -p /opt/ants && \
+#    curl -L "https://osf.io/jrvjk/?action=download" -o /opt/ants/ANTs-Linux_Ubuntu14.04.tar.bz2
 #RUN tar -xjC /opt/ants --strip-components 1
-RUN cd /opt/ants && \
-    tar -vxjf ANTs-Linux_Ubuntu14.04.tar.bz2
-ENV ANTSPATH /opt/ants/ANTs.2.1.0.Debian-Ubuntu_X64
-ENV PATH $ANTSPATH:$PATH
+#RUN cd /opt/ants && \
+#    tar -vxjf ANTs-Linux_Ubuntu14.04.tar.bz2
+#ENV ANTSPATH /opt/ants/ANTs.2.1.0.Debian-Ubuntu_X64
+#ENV PATH $ANTSPATH:$PATH
 
 #RUN apt-get install -y ants
 #ENV ANTSPATH /usr/bin/
