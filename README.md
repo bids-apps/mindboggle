@@ -21,10 +21,10 @@ bids_dir/
         surf/
 ```
 
-To build the docker image, do
+To pull the docker image from Docker Hub, do 
 
 ```
-docker build -t bids/mindboggle .
+docker pull bids/mindboggle
 ```
 
 To run the docker, do
@@ -37,6 +37,12 @@ To use bash:
 
 ```
  docker run -ti -v /Users/keshavan/Downloads/mindboggle_input_example/bids:/root/data --entrypoint /bin/bash bids/mindboggle 
+```
+
+For developers, you can make changes to the Dockerfile, and build the docker image, by running
+
+```
+docker build -t bids/mindboggle .
 ```
 
 ## Acknowledgements
