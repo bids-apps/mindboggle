@@ -1,4 +1,5 @@
-FROM bids/freesurfer
+#FROM bids/freesurfer
+FROM poldracklab/fmriprep
 MAINTAINER Mindboggle <anishakeshavan@gmail.com>
 
 # Preparations
@@ -6,71 +7,72 @@ RUN ln -snf /bin/bash /bin/sh
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Update packages and install the minimal set of tools
-RUN apt-get update #&& \
-RUN apt-get install -y curl \
-                       git \
-                       xvfb \
-                       bzip2 \
-                       unzip \
-                       apt-utils 
-RUN apt-get install -y gfortran
-RUN apt-get install -y liblapack-dev
-RUN apt-get install -y libblas-dev \
-                       libatlas-dev \
-                       libatlas-base-dev \
-                       libblas3 \
-                       #libblas-common \
-                       libopenblas-dev \
-                       libxml2-dev \
-                       libxslt1-dev \
-                       libfreetype6-dev \
-                       libpng12-dev \
-                       libqhull-dev \
-                       libxft-dev \
-                       libjpeg-dev \
-                       libyaml-dev \
-                       graphviz \
-                       lib32z1 \ 
-                       make \
-                       g++ libsm-dev libXext-dev libXt-dev
+#RUN apt-get update #&& \
+#RUN apt-get install -y curl \
+#                       git \
+#                       xvfb \
+#                       bzip2 \
+#                       unzip \
+#                       apt-utils 
+#RUN apt-get install -y gfortran
+#RUN apt-get install -y liblapack-dev
+#RUN apt-get install -y libblas-dev \
+#                       libatlas-dev \
+#                       libatlas-base-dev \
+#                       libblas3 \
+#                       #libblas-common \
+#                       libopenblas-dev \
+#                       libxml2-dev \
+#                       libxslt1-dev \
+#                       libfreetype6-dev \
+#                       libpng12-dev \
+#                       libqhull-dev \
+#                       libxft-dev \
+#                       libjpeg-dev \
+#                       libyaml-dev \
+#                       graphviz \
+#                       lib32z1 \ 
+#                       make \
+#                       g++ #libsm-dev libXext-dev libXt-dev
 
-RUN apt-get install -y curl
-RUN apt-get install -y git
-RUN apt-get install -y bzip2
+#RUN apt-get install -y curl
+#RUN apt-get install -y git
+#RUN apt-get install -y bzip2
 
 
 # Enable neurodebian
-RUN curl -sSL http://neuro.debian.net/lists/trusty.us-tn.full | tee /etc/apt/sources.list.d/neurodebian.sources.list && \
-    apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 0xA5D32F012649A5A9 && \
-    apt-get update
+#RUN curl -sSL http://neuro.debian.net/lists/trusty.us-tn.full | tee /etc/apt/sources.list.d/neurodebian.sources.list && \
+#    apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 0xA5D32F012649A5A9 && \
+#    apt-get update
 
 # Clear apt cache to reduce image size
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Preparations
 RUN ln -snf /bin/bash /bin/sh
 WORKDIR /root
 
 # Install miniconda
-RUN curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    /bin/bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda && \
-    rm Miniconda3-latest-Linux-x86_64.sh && \
-    echo '#!/bin/bash' >> /etc/profile.d/nipype.sh && \
-    echo 'export PATH=/usr/local/miniconda/bin:$PATH' >> /etc/profile.d/nipype.sh
+#RUN curl -sSLO https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+#    /bin/bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda && \
+#    rm Miniconda3-latest-Linux-x86_64.sh && \
+#    echo '#!/bin/bash' >> /etc/profile.d/nipype.sh && \
+#    echo 'export PATH=/usr/local/miniconda/bin:$PATH' >> /etc/profile.d/nipype.sh
 
-ENV PATH /usr/local/miniconda/bin:$PATH
+#ENV PATH /usr/local/miniconda/bin:$PATH
 
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
 ENV LANG C.UTF-8
 
 # Add conda-forge channel in conda
-RUN conda config --add channels conda-forge
+#RUN conda config --add channels conda-forge
 
-RUN conda install -y nipype
+#RUN conda install -y nipype
+RUN conda install -y llvm=3.3
 RUN conda install -y -c https://conda.anaconda.org/clinicalgraphics vtk cmake
 RUN conda install -y pandas
-RUN git clone https://github.com/nipy/mindboggle
+RUN git clone https://github.com/akeshavan/mindboggle
 RUN cd mindboggle && \
     python setup.py install
 
@@ -80,10 +82,10 @@ ENV vtk_cpp_tools "/root/mindboggle/vtk_cpp_tools/bin"
 
 #RUN apt-get update
 #RUN apt-get install -y make g++ libsm-dev libXext-dev libXt-dev
-RUN mkdir $vtk_cpp_tools && \
-    cd $vtk_cpp_tools && \
-    cmake ../ -DVTK_DIR:STRING=$VTK_DIR && \
-    make
+#RUN mkdir $vtk_cpp_tools && \
+#    cd $vtk_cpp_tools && \
+#    cmake ../ -DVTK_DIR:STRING=$VTK_DIR && \
+#    make
 
 
 RUN mkdir ${HOME}/data
