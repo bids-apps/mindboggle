@@ -123,4 +123,6 @@ RUN echo "source /etc/profile.d/nipype.sh" >> /etc/bash.bashrc
 
 COPY version /version
 
+RUN conda install -y jupyter
+
 ENTRYPOINT ["/code/run.py"]
