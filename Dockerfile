@@ -80,12 +80,16 @@ ENV CONDA_PATH "/usr/local/miniconda/"
 ENV VTK_DIR "$CONDA_PATH/lib/cmake/vtk-7.0"
 ENV vtk_cpp_tools "/root/mindboggle/vtk_cpp_tools/bin"
 
-#RUN apt-get update
-#RUN apt-get install -y make g++ libsm-dev libXext-dev libXt-dev
-#RUN mkdir $vtk_cpp_tools && \
-#    cd $vtk_cpp_tools && \
-#    cmake ../ -DVTK_DIR:STRING=$VTK_DIR && \
-#    make
+RUN apt-get update
+RUN apt-get install -y make g++ 
+RUN apt-get install -y libtbb-dev
+RUN apt-get install -y libsm-dev
+RUN apt-get install -y libx11-dev
+RUN apt-get install -y libxt-dev libxext-dev
+RUN mkdir $vtk_cpp_tools && \
+    cd $vtk_cpp_tools && \
+    cmake ../ -DVTK_DIR:STRING=$VTK_DIR && \
+    make
 
 
 RUN mkdir ${HOME}/data
