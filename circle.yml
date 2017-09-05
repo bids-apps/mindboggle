@@ -24,7 +24,7 @@ dependencies:
 
 test:
   override:
-    - docker run -ti --rm --read-only -v /tmp:/tmp -v /var/tmp:/var/tmp -v ${HOME}/data/ds114_test1:/bids_dataset -v ${HOME}/outputs1:/outputs bids/${CIRCLE_PROJECT_REPONAME,,} /bids_dataset /outputs participant --participant_label 01 :
+    - docker run -ti --rm --read-only -v /tmp:/tmp -v /var/tmp:/var/tmp -v ${HOME}/data/ds114_test1:/home/jovyan/work/bids_dataset -v ${HOME}/outputs1:/home/jovyan/work/bids_dataset/outputs bids/${CIRCLE_PROJECT_REPONAME,,} /home/jovyan/work/bids_dataset /home/jovyan/work/bids_dataset/outputs participant --participant_label 01 :
         timeout: 21600
 
 deployment:
