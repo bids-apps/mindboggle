@@ -1,3 +1,5 @@
 FROM nipy/mindboggle
 MAINTAINER Mindboggle <anishakeshavan@gmail.com>
-ENTRYPOINT ["/code/run.py"]
+RUN mkdir ~/code
+COPY run.py ~/code/run.py
+ENTRYPOINT ["~/code/run.py"]

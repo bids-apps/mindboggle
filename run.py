@@ -47,7 +47,7 @@ if args.participant_label:
     subjects_to_analyze = args.participant_label
 # for all subjects
 else:
-    subjects_to_analyze = [s.split("/")[-1] for s in glob(os.path.join(args.bids_dir, "sub*")]
+    subjects_to_analyze = [s.split("/")[-1] for s in glob(os.path.join(args.bids_dir, "sub*"))]
 
 # running participant level
 print(args)
