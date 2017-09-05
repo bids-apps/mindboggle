@@ -38,7 +38,7 @@ Its important to mount to a directory in `/home/jovyan/` because you are not roo
 To use bash:
 
 ```
- docker run -ti -v /Users/keshavan/Downloads/mindboggle_input_example/bids:/root/data --entrypoint /bin/bash bids/mindboggle 
+ docker run -ti -v /Users/keshavan/Downloads/mindboggle_input_example/bids:/home/jovyan/work/data --entrypoint /bin/bash bids/mindboggle 
 ```
 
 For developers, you can make changes to the Dockerfile, and build the docker image, by running
