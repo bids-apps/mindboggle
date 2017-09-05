@@ -4,18 +4,21 @@ import os
 from os.path import join, exists, abspath
 from subprocess import check_call
 from glob import glob
+from nipype.utils.filemanip import split_filename
 
 def get_t1_images(basedir, subject_label):
-    out = glob(join(basedir,"anat", "sub-%s_T1w.nii.gz" % (subject_label))) + \
-    glob(join(basedir, "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
+    print(join(basedir,subject_label, "anat", "sub-%s_T1w.nii.gz" % (subject_label)))
+    print(join(basedir,subject_label, "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
+    out = glob(join(basedir,"sub-%s"%subject_label,"anat", "sub-%s_T1w.nii.gz" % (subject_label))) + \
+    glob(join(basedir,"sub-%s"%subject_label, "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
     return out
 
-def run_mindboggle(image, output_dir):
+def run_mindboggle(image, subject_id, output_dir):
     #mindboggle123 $IMAGE --id $ID --out $OUT --working $WORKING
     cmd = ["mindboggle123", image,
+           "--id", subject_id,
            "--out", join(output_dir, "derivatives", "mindboggle"),
            "--working", join(output_dir,"scratch"),
-           "--cache", join(output_dir,"scratch", "cache")
            ]
     check_call(cmd)
     return
@@ -47,7 +50,7 @@ if args.participant_label:
     subjects_to_analyze = args.participant_label
 # for all subjects
 else:
-    subjects_to_analyze = [s.split("/")[-1] for s in glob(os.path.join(args.bids_dir, "sub*"))]
+    subjects_to_analyze = [s.split("/")[-1].replace("sub-","") for s in glob(os.path.join(args.bids_dir, "sub*"))]
 
 # running participant level
 print(args)
@@ -59,5 +62,11 @@ if args.analysis_level == "participant":
         print("subject_label is", subject_label)
         t1_images = get_t1_images(args.bids_dir, subject_label)
         print("images are", t1_images)
-        [run_mindboggle(t1, args.output_dir) for t1 in t1_images]
+        for t1 in t1_images:
+            if len(t1_images) > 1:
+                pth, label, ext = split_filename(t1)
+            else:
+                label = "sub-%s" % subject_label
+
+            run_mindboggle(t1, label, args.output_dir)
 
