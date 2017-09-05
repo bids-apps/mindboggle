@@ -57,7 +57,7 @@ if args.analysis_level == "participant":
     # find all T1s and skullstrip them
     for subject_label in subjects_to_analyze:
         print("subject_label is", subject_label)
-        t1_images = get_t1_images(subject_label)
+        t1_images = get_t1_images(args.bids_dir, subject_label)
         print("images are", t1_images)
         [run_mindboggle(t1, args.output_dir) for t1 in t1_images]
 
