@@ -6,6 +6,8 @@ from subprocess import check_call
 from glob import glob
 from nipype.utils.filemanip import split_filename
 
+__version__ = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'version')).read()
+
 def get_t1_images(basedir, subject_label):
     print(join(basedir,subject_label, "anat", "sub-%s_T1w.nii.gz" % (subject_label)))
     print(join(basedir,subject_label, "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
@@ -41,6 +43,9 @@ parser.add_argument('--participant_label', help='The label(s) of the participant
                                                 'provided all subjects should be analyzed. Multiple '
                                                 'participants can be specified with a space separated list.',
                     nargs="+")
+
+parser.add_argument('-v', '--version', action='version',
+                    version='BIDS-App Mindboggle version {}'.format(__version__))
 
 args = parser.parse_args()
 
