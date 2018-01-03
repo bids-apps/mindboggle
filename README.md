@@ -8,19 +8,6 @@ The Mindboggle project's mission is to improve the accuracy, precision, and cons
 
 ## Docker 
 
-This app assumes the freesurfer BIDS-App has been run. 
-
-The folder structure of the mindboggle input should look like:
-```
-bids_dir/
-  derivatives/
-    freesurfer/
-      sub-*/
-        mri/ 
-        label/
-        surf/
-```
-
 To pull the docker image from Docker Hub, do 
 
 ```
