@@ -17,7 +17,7 @@ docker pull bids/mindboggle
 To run the docker, do:
 
 ```
-docker run -ti -v $PWD/ds114_test1:/home/jovyan/work/data bids/mindboggle /home/jovyan/work/data /home/jovyan/work/data/derivatives/ participant
+docker run -ti -v $PWD/ds114_test1:/home/jovyan/work/data bids/mindboggle /home/jovyan/work/data /home/jovyan/work/data participant
 ```
 
 Its important to mount to a directory in `/home/jovyan/` because you are not root in this Docker image.
