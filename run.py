@@ -12,7 +12,7 @@ def get_t1_images(basedir, subject_label):
     print(join(basedir,subject_label, "anat", "sub-%s_T1w.nii.gz" % (subject_label)))
     print(join(basedir,subject_label, "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
     out = glob(join(basedir,"sub-%s"%subject_label,"anat", "sub-%s_T1w.nii.gz" % (subject_label))) + \
-    glob(join(basedir,"sub-%s"%subject_label, "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
+    glob(join(basedir,"sub-%s"%subject_label, "ses-*", "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
     return out
 
 def run_mindboggle(image, subject_id, output_dir):
