@@ -10,7 +10,7 @@ The Mindboggle project's mission is to improve the accuracy, precision, and cons
 
 To pull the docker image from Docker Hub, do 
 
-```
+```bash
 docker pull bids/mindboggle
 ```
 
