@@ -1,14 +1,14 @@
 # mindboggle
 
-[![Build Status](https://circleci.com/gh/BIDS-Apps/mindboggle.png?circle-token=:d4d232bd9d9bcf925155774e1b2d24cdc365bd19)](https://circleci.com/gh/BIDS-Apps/mindboggle)  
+[![Build Status](https://circleci.com/gh/BIDS-Apps/mindboggle.png?circle-token=:d4d232bd9d9bcf925155774e1b2d24cdc365bd19)](https://circleci.com/gh/BIDS-Apps/mindboggle)
 
-## Description 
+## Description
 
 The Mindboggle project's mission is to improve the accuracy, precision, and consistency of automated labeling and shape analysis of human brain image data. We promote open science by making all software, data, and documentation freely and openly available. For more information on mindboggle, check out the [mindboggle website](http://mindboggle.readthedocs.io/en/latest/#preprocessing)
 
-## Docker 
+## Docker
 
-To pull the docker image from Docker Hub, do 
+To pull the docker image from Docker Hub, do
 
 ```bash
 docker pull bids/mindboggle
@@ -25,7 +25,7 @@ Its important to mount to a directory in `/home/jovyan/` because you are not roo
 To use bash:
 
 ```
- docker run -ti -v /Users/keshavan/Downloads/mindboggle_input_example/bids:/home/jovyan/work/data --entrypoint /bin/bash bids/mindboggle 
+ docker run -ti -v /Users/keshavan/Downloads/mindboggle_input_example/bids:/home/jovyan/work/data --entrypoint /bin/bash bids/mindboggle
 ```
 
 For developers, you can make changes to the Dockerfile, and build the docker image, by running

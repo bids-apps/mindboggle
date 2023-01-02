@@ -74,4 +74,3 @@ if args.analysis_level == "participant":
                 label = "sub-%s" % subject_label
 
             run_mindboggle(t1, label, args.output_dir)
-
