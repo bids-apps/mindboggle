@@ -9,18 +9,20 @@ from nipype.utils.filemanip import split_filename
 __version__ = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'version')).read()
 
 def get_t1_images(basedir, subject_label):
-    print(join(basedir,subject_label, "anat", "sub-%s_T1w.nii.gz" % (subject_label)))
-    print(join(basedir,subject_label, "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
-    out = glob(join(basedir,"sub-%s"%subject_label,"anat", "sub-%s_T1w.nii.gz" % (subject_label))) + \
-    glob(join(basedir,"sub-%s"%subject_label, "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
+    #print(join(basedir,subject_label, "anat", "sub-%s_run*_T1w.nii.gz" % (subject_label)))
+    #print(join(basedir,subject_label, "anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
+    out = glob(join(basedir,"sub-%s"%subject_label,"anat", "sub-%s_*T1w.nii.gz" % (subject_label))) + \
+    glob(join(basedir,"sub-%s"%subject_label, "ses-*","anat", "sub-%s_ses-*_T1w.nii.gz" % (subject_label)))
     return out
 
-def run_mindboggle(image, subject_id, output_dir):
+def run_mindboggle(image, subject_id, output_dir, ncpus):
     #mindboggle123 $IMAGE --id $ID --out $OUT --working $WORKING
+    #       "--plugin MultiProc --plugin_args dict(n_procs=2)"
     cmd = ["mindboggle123", image,
            "--id", subject_id,
            "--out", join(output_dir, "derivatives", "mindboggle"),
-           "--working", join(output_dir,"scratch"),
+           "--working", join(output_dir,"scratch",subject_id),
+           "--fs_openmp",ncpus,"--ants_num_threads",ncpus,"--mb_num_threads",ncpus,
            ]
     check_call(cmd)
     return
@@ -46,6 +48,7 @@ parser.add_argument('--participant_label', help='The label(s) of the participant
 
 parser.add_argument('-v', '--version', action='version',
                     version='BIDS-App Mindboggle version {}'.format(__version__))
+parser.add_argument('-c', '--cpus', help='Number of CPU threads to use',nargs='?',default='1')
 
 args = parser.parse_args()
 
@@ -58,8 +61,9 @@ else:
     subjects_to_analyze = [s.split("/")[-1].replace("sub-","") for s in glob(os.path.join(args.bids_dir, "sub*"))]
 
 # running participant level
-print(args)
-print(subjects_to_analyze)
+print("LOG: arguments: ",args)
+print("LOG: subjects: ",subjects_to_analyze)
+print("LOG: cpus: ",args.cpus)
 if args.analysis_level == "participant":
     print("running")
     # find all T1s and skullstrip them
@@ -73,5 +77,4 @@ if args.analysis_level == "participant":
             else:
                 label = "sub-%s" % subject_label
 
-            run_mindboggle(t1, label, args.output_dir)
-
+            run_mindboggle(t1, label, args.output_dir, args.cpus)
