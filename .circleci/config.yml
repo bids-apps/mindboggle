@@ -1,38 +1,77 @@
-general:
-  artifacts:
-    - "~/outputs1"
-    - "~/outputs2"
-machine:
-  services:
-    - docker #don't use 1.10 - caching is broken
+version: 2
 
-dependencies:
-  cache_directories:
-    - "~/docker"
-    - "~/data"
+jobs:
+  build:
+    machine:
+      # https://circleci.com/developer/machine/image/ubuntu-2204
+      image: ubuntu-2204:2022.10.2
 
-  override:
-    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
-    - if [[ ! -d ~/data ]]; then mkdir -p ~/data; fi
-    - if [[ ! -d ~/data/ds114_test1_with_freesurfer ]]; then wget -c -O ~/ds114_test1_with_freesurfer.tar.gz "https://files.osf.io/v1/resources/9q7dv/providers/osfstorage/57e54a106c613b01d9d3ed7d"; fi
-    - ls -la
-    - tar xfz ~/ds114_test1_with_freesurfer.tar.gz -C ~/data # - git describe --tags > version
-    - docker build -t bids/${CIRCLE_PROJECT_REPONAME,,} . :
-        timeout: 21600
-    - mkdir -p ~/docker; docker save "bids/${CIRCLE_PROJECT_REPONAME,,}" > ~/docker/image.tar
-    - mkdir -p ${HOME}/outputs
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - my_cache
 
-test:
-  override:
-    - docker run -ti --rm --read-only -v /tmp:/tmp -v /var/tmp:/var/tmp -v ${HOME}/data/ds114_test1:/home/jovyan/work/bids_dataset -v ${HOME}/outputs1:/home/jovyan/work/bids_dataset/outputs bids/${CIRCLE_PROJECT_REPONAME,,} --version :
-        timeout: 21600
+      - run:
+          command: |
+              if [[ ! -d ~/data ]]; then 
+                mkdir -p ~/data; 
+              fi
 
-deployment:
-  hub:
-    owner: BIDS-Apps
-    tag: /.*/
-    commands:
-      - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS && docker push bids/${CIRCLE_PROJECT_REPONAME}:latest; fi :
-          timeout: 21600
-      - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS && docker tag bids/${CIRCLE_PROJECT_REPONAME} bids/${CIRCLE_PROJECT_REPONAME}:$CIRCLE_TAG && docker push bids/${CIRCLE_PROJECT_REPONAME}:$CIRCLE_TAG; fi :
-          timeout: 21600
+      - run:
+          command: |
+              if [[ ! -d ~/data/ds114_test1_with_freesurfer ]]; then
+                wget -c -O ~/ds114_test1_with_freesurfer.tar.gz "https://files.osf.io/v1/resources/9q7dv/providers/osfstorage/57e54a106c613b01d9d3ed7d"; 
+              fi
+      - run: ls -la
+      - run: tar xfz ~/ds114_test1_with_freesurfer.tar.gz -C ~/data 
+      - run: if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
+      - run: git describe --tags --always > version
+      - run:
+          command: docker build -t bids/${CIRCLE_PROJECT_REPONAME,,} .
+          no_output_timeout: 6h
+      - run: mkdir -p ~/docker; docker save "bids/${CIRCLE_PROJECT_REPONAME,,}" > ~/docker/image.tar
+      - run: mkdir -p ${HOME}/outputs
+
+      - save_cache:
+          key: my_cache
+          paths:
+            - "~/docker"
+            - "~/data"
+
+  test:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: docker load -i /tmp/workspace/docker/image.tar
+      - run:
+          command: docker run -ti --rm --read-only \
+            -v /tmp:/tmp \
+            -v /var/tmp:/var/tmp \
+            -v ${HOME}/data/ds114_test1:/home/jovyan/work/bids_dataset \
+            -v ${HOME}/outputs1:/home/jovyan/work/bids_dataset/outputs \
+            bids/${CIRCLE_PROJECT_REPONAME,,} --version
+          no_output_timeout: 6h
+
+  deploy:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: docker load -i /tmp/workspace/docker/image.tar
+      # DOCKER_PASS and DOCKER_USER are defined as CircleCI env variables (check circleci project in web form)
+      - run:
+          command: |
+            if [[ -n "$DOCKER_PASS" ]]; then
+              echo "${DOCKER_PASS}" | docker login -u ${DOCKER_USER} --password-stdin && \
+              docker push bids/${CIRCLE_PROJECT_REPONAME}:latest
+              if [[ -n "${CIRCLE_TAG}" ]]; then
+                docker tag bids/${CIRCLE_PROJECT_REPONAME} bids/${CIRCLE_PROJECT_REPONAME}:$CIRCLE_TAG
+                docker push bids/${CIRCLE_PROJECT_REPONAME}:$CIRCLE_TAG;
+              fi
+            fi
+
+# VS Code Extension Version: 1.5.1
