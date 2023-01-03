@@ -1,5 +1,5 @@
 FROM nipy/mindboggle
-MAINTAINER Mindboggle <anishakeshavan@gmail.com>
+# MAINTAINER Mindboggle <anishakeshavan@gmail.com>
 USER root
 RUN mkdir -p /opt/bids-mindboggle/
 COPY run.py /opt/bids-mindboggle/run.py
