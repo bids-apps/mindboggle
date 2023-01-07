@@ -16,12 +16,12 @@ jobs:
         name: Get test data
         command: |
           wget https://raw.githubusercontent.com/bids-apps/maintenance-tools/main/utils/get_data_from_osf.sh
-          bash get_data_from_osf.sh ds114_test1_with_freesurfer  
+          bash get_data_from_osf.sh ds114_test1_with_freesurfer
     - run:
         name: Build Docker image
         command: |
           wget https://raw.githubusercontent.com/bids-apps/maintenance-tools/main/circleci/build_docker.sh
-          bash build_docker.sh 
+          bash build_docker.sh
 
     - save_cache:
         key: my_cache
@@ -70,7 +70,7 @@ jobs:
         name: push to dockerhub
         command: |
           wget https://raw.githubusercontent.com/bids-apps/maintenance-tools/main/circleci/push_docker.sh
-          bash push_docker.sh  
+          bash push_docker.sh
 
 workflows:
   build-test-deploy:
