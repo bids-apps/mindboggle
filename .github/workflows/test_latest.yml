@@ -36,29 +36,30 @@ jobs:
 
     - name: print version
       run: |
-        docker run -t --rm \
+        docker run -t --rm --read-only \
               bids/mindboggle:latest -v
-        docker run -t --rm \
+        docker run -t --rm --read-only \
               bids/mindboggle:latest -h
 
     - name: get data
       run: |
         wget https://raw.githubusercontent.com/bids-apps/maintenance-tools/main/utils/get_data_from_osf.sh
-        bash get_data_from_osf.sh ds114_test1_with_freesurfer
+        bash get_data_from_osf.sh ds114_test1
 
     - name: prepare output dir
       run: mkdir -p ${HOME}/outputs
 
     - name: participant level test
       run: |
-        docker run -t --rm \
-          -v ${HOME}/data/ds114_test1_with_freesurfer://home/jovyan/work/data \
-          -v ${HOME}/outputs:/outputs \
+        docker run -t --rm --read-only \
+          -v ${HOME}/data/ds114_test1:/home/jovyan/work/bids_dataset \
+          -v ${HOME}/outputs1:/home/jovyan/work/outputs \
             bids/mindboggle \
-              /home/jovyan/work/data \
-              /home/jovyan/work/data/derivatives/ \
+              /home/jovyan/work/bids_dataset \
+              /home/jovyan/work/outputs \
               participant \
               --participant_label 01
+
 
     - name: check output
       run: tree ${HOME}/data/ds114_test1_with_freesurfer/derivatives
