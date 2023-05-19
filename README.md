@@ -16,21 +16,28 @@ docker pull bids/mindboggle
 
 To run the docker, do:
 
-```
-docker run -ti -v $PWD/ds114_test1:/home/jovyan/work/data bids/mindboggle /home/jovyan/work/data /home/jovyan/work/data/derivatives/ participant
+```bash
+docker run -ti \
+    -v $PWD/ds114_test1:/home/jovyan/work/data \
+    bids/mindboggle \
+        /home/jovyan/work/data \
+        /home/jovyan/work/data/derivatives/ participant
 ```
 
 Its important to mount to a directory in `/home/jovyan/` because you are not root in this Docker image.
 
 To use bash:
 
-```
- docker run -ti -v /Users/keshavan/Downloads/mindboggle_input_example/bids:/home/jovyan/work/data --entrypoint /bin/bash bids/mindboggle
+```bash
+ docker run -ti \
+    -v /Users/keshavan/Downloads/mindboggle_input_example/bids:/home/jovyan/work/data \
+    --entrypoint /bin/bash \
+        bids/mindboggle
 ```
 
 For developers, you can make changes to the Dockerfile, and build the docker image, by running
 
-```
+```bash
 docker build -t bids/mindboggle .
 ```
 

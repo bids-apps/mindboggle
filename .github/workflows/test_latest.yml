@@ -52,10 +52,12 @@ jobs:
     - name: participant level test
       run: |
         docker run -t --rm --read-only \
-          -v ${HOME}/data/ds114_test1_with_freesurfer:/bids_dataset \
+          -v ${HOME}/data/ds114_test1_with_freesurfer://home/jovyan/work/data \
           -v ${HOME}/outputs:/outputs \
             bids/mindboggle \
-              /bids_dataset /outputs participant \
+              /home/jovyan/work/data \
+              /home/jovyan/work/data/derivatives/ \
+              participant \
               --participant_label 01
 
     - name: check output
