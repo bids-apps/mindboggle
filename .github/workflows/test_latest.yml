@@ -36,9 +36,9 @@ jobs:
 
     - name: print version
       run: |
-        docker run -t --rm --read-only \
+        docker run -t --rm \
               bids/mindboggle:latest -v
-        docker run -t --rm --read-only \
+        docker run -t --rm \
               bids/mindboggle:latest -h
 
     - name: get data
@@ -51,7 +51,7 @@ jobs:
 
     - name: participant level test
       run: |
-        docker run -t --rm --read-only \
+        docker run -t --rm \
           -v ${HOME}/data/ds114_test1_with_freesurfer://home/jovyan/work/data \
           -v ${HOME}/outputs:/outputs \
             bids/mindboggle \
@@ -61,4 +61,4 @@ jobs:
               --participant_label 01
 
     - name: check output
-      run: tree ${HOME}/outputs
+      run: tree ${HOME}/data/ds114_test1_with_freesurfer/derivatives
