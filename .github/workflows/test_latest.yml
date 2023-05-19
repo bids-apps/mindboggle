@@ -36,9 +36,9 @@ jobs:
 
     - name: print version
       run: |
-        docker run -t --rm --read-only \
+        docker run -t --rm \
               bids/mindboggle:latest -v
-        docker run -t --rm --read-only \
+        docker run -t --rm \
               bids/mindboggle:latest -h
 
     - name: get data
@@ -51,7 +51,7 @@ jobs:
 
     - name: participant level test
       run: |
-        docker run -t --rm --read-only \
+        docker run -t --rm \
           -v ${HOME}/data/ds114_test1:/home/jovyan/work/bids_dataset \
           -v ${HOME}/outputs1:/home/jovyan/work/outputs \
             bids/mindboggle \
