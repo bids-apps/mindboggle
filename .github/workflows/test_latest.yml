@@ -1,0 +1,65 @@
+---
+name: test latest image
+
+on:
+  pull_request:
+    branches: ['*']
+  schedule:
+  - cron: 0 0 1 * *
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+
+  test_latest_image:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y tree
+
+    - name: Clone repo
+      uses: actions/checkout@v3
+
+    - name: pull docker image
+      run: docker pull bids/mindboggle:latest
+
+    - name: print version
+      run: |
+        docker run -t --rm \
+              bids/mindboggle:latest -v
+        docker run -t --rm \
+              bids/mindboggle:latest -h
+
+    - name: get data
+      run: |
+        wget https://raw.githubusercontent.com/bids-apps/maintenance-tools/main/utils/get_data_from_osf.sh
+        bash get_data_from_osf.sh ds114_test1
+
+    - name: prepare output dir
+      run: mkdir -p ${HOME}/outputs
+
+    - name: participant level test
+      run: |
+        docker run -t --rm \
+          -v ${HOME}/data/ds114_test1:/home/jovyan/work/bids_dataset \
+          -v ${HOME}/outputs1:/home/jovyan/work/outputs \
+            bids/mindboggle \
+              /home/jovyan/work/bids_dataset \
+              /home/jovyan/work/outputs \
+              participant \
+              --participant_label 01
+
+
+    - name: check output
+      run: tree ${HOME}/data/ds114_test1_with_freesurfer/derivatives
